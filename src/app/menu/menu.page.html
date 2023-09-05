@@ -1,13 +1,18 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>menu</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">menu</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
+<ion-split-pane contentId="main">
+  <ion-menu contentId="main">
+    <ion-header>
+      <ion-toolbar color="secondary">
+        <ion-title>Menu</ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <ion-menu-toggle *ngFor="let path of paths" [autoHide]="false">
+        <ion-item [routerLink]="path.url">
+          <ion-icon slot="start" [icon]="path.icon"></ion-icon>
+          {{path.name}}
+        </ion-item>
+      </ion-menu-toggle>
+    </ion-content>
+  </ion-menu>
+  <ion-router-outlet id="main"></ion-router-outlet>
+</ion-split-pane>

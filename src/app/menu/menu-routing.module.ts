@@ -6,7 +6,22 @@ import { MenuPage } from './menu.page';
 const routes: Routes = [
   {
     path: '',
-    component: MenuPage
+    component: MenuPage,
+    children: [
+      {
+        path: 'list',
+        loadChildren: () => import('../list/list.module').then( m => m.ListPageModule)
+      },
+      {
+        path: 'settings',
+        loadChildren: () => import('../settings/settings.module').then( m => m.SettingsPageModule)
+      },
+      {
+        path: '',
+        redirectTo: 'list',
+        pathMatch: 'full'
+      }
+    ]
   }
 ];
 
