@@ -1,12 +1,125 @@
-<ion-header>
-  <ion-toolbar color="success">
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title>list</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="ion-padding">
-  UI goes here...
-</ion-content>
+<ng-container class="page">
+  <ion-header>
+    <ion-toolbar color="success">
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title>List</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="clearList()">
+          <ion-icon slot="icon-only" icon="trash-bin-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+    <ion-toolbar color="success">
+      <ion-searchbar></ion-searchbar>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content>
+    <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+  
+    <ng-container *ngIf="loading">
+      <ion-card *ngFor="let item of iterable" class="ion-margin-bottom">
+        <ion-card-content class="ion-no-padding">
+          <ion-item lines="none">
+            <ion-avatar slot="start">
+              <ion-skeleton-text animated></ion-skeleton-text>
+            </ion-avatar>
+            <ion-label>
+              <ion-skeleton-text animated style="width: 150px; height: 1em"></ion-skeleton-text>
+              <p>
+                <ion-skeleton-text animated></ion-skeleton-text>
+              </p>
+            </ion-label>
+            <ion-chip slot="end" color="primary">
+            </ion-chip>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
+  
+    <ion-card *ngFor="let user of users" class="ion-margin-bottom" (click)="selectedUser = user">
+      <ion-card-content class="ion-no-padding">
+        <ion-item lines="none">
+          <ion-avatar slot="start">
+            <ion-img [src]="user.picture.thumbnail"></ion-img>
+          </ion-avatar>
+          <ion-label>
+            {{user.name.first}} {{user.name.last}}
+            <p>{{user.email}}</p>
+          </ion-label>
+          <ion-chip slot="end" color="primary">
+            {{user.nat}}
+          </ion-chip>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+  
+    <ion-modal #modal [isOpen]="selectedUser !== undefined" (didDismiss)="selectedUser = undefined"
+      [breakpoints]="[0, 0.5, 0.8]" [initialBreakpoint]="0.8">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar color="light">
+            <ion-buttons slot="start">
+              <ion-button (click)="modal.dismiss()">Close</ion-button>
+            </ion-buttons>
+            <ion-title>{{selectedUser?.name?.first}} {{selectedUser?.name?.last}}</ion-title>
+          </ion-toolbar>
+          <ion-toolbar color="light">
+            <ion-segment [value]="activeSegment" (ionChange)="changeSegment($event)">
+              <ion-segment-button value="details">Details</ion-segment-button>
+              <ion-segment-button value="calendar">Calendar</ion-segment-button>
+            </ion-segment>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <ng-container [ngSwitch]="activeSegment">
+            <ng-container *ngSwitchCase="'details'">
+              <ion-card>
+                <ion-card-header>
+                  <ion-img [src]="selectedUser.picture.large" style="height: 150px;"></ion-img>
+                </ion-card-header>
+                <ion-card-content class="ion-no-padding">
+                  <ion-item lines="none">
+                    <ion-label class="ion-text-wrap">
+                      {{selectedUser?.name?.first}} {{selectedUser?.name?.last}}
+                      <p>{{selectedUser?.email}}</p>
+                    </ion-label>
+                  </ion-item>
+                </ion-card-content>
+              </ion-card>
+            </ng-container>
+            <ng-container *ngSwitchCase="'calendar'">
+              <ion-datetime></ion-datetime>
+            </ng-container>
+          </ng-container>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+  
+    <ion-modal #cardModal trigger="card-modal" [presentingElement]="page!">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar color="success">
+            <ion-buttons slot="start">
+              <ion-button (click)="cardModal.dismiss()">Close</ion-button>
+            </ion-buttons>
+            <ion-title>Card Modal</ion-title>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <p>My card modal</p>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+  
+    <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button id="card-modal">
+        <ion-icon icon="add-outline"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  </ion-content>
+</ng-container>
