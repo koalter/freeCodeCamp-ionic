@@ -1,0 +1,5 @@
+// Only visible in iOS
+ion-item::part(detail-icon) {
+  color: fuchsia;
+  opacity: 1;
+}
