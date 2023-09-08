@@ -3,10 +3,12 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>Tab 1</ion-title>
+    <ion-title>Image Example</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  UI goes here...
+  <!-- UI goes here... -->
+  <ion-button expand="block" (click)="takePicture()">Take Picture</ion-button>
+  <img [src]="image" alt="">
 </ion-content>
